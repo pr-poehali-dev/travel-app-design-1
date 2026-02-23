@@ -1,9 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 
 const HERO_IMAGE = "https://cdn.poehali.dev/projects/95e4d448-a635-4774-8f58-60be2f40a2da/files/6721e4cf-34b7-454d-92ee-a438298aaa84.jpg";
@@ -13,64 +11,16 @@ const PARIS_IMAGE = "https://cdn.poehali.dev/projects/95e4d448-a635-4774-8f58-60
 type Page = "home" | "results" | "booking" | "profile" | "saved" | "reviews";
 
 const hotels = [
-  {
-    id: 1,
-    name: "Grand Palace Hotel",
-    city: "Дубай",
-    stars: 5,
-    rating: 4.9,
-    reviews: 2841,
-    price: 18500,
-    oldPrice: 24000,
-    image: HOTEL_IMAGE,
-    tags: ["Бассейн", "SPA", "Завтрак"],
-    saved: true,
-  },
-  {
-    id: 2,
-    name: "Eiffel Luxe Residence",
-    city: "Париж",
-    stars: 5,
-    rating: 4.7,
-    reviews: 1523,
-    price: 22300,
-    oldPrice: null,
-    image: PARIS_IMAGE,
-    tags: ["Вид на башню", "Ресторан", "Трансфер"],
-    saved: false,
-  },
-  {
-    id: 3,
-    name: "Azure Beach Resort",
-    city: "Бали",
-    stars: 4,
-    rating: 4.8,
-    reviews: 3201,
-    price: 12900,
-    oldPrice: 16000,
-    image: HERO_IMAGE,
-    tags: ["Пляж", "Бассейн", "Дайвинг"],
-    saved: true,
-  },
-  {
-    id: 4,
-    name: "Tokyo Sky Tower Suite",
-    city: "Токио",
-    stars: 5,
-    rating: 4.6,
-    reviews: 987,
-    price: 31000,
-    oldPrice: null,
-    image: HOTEL_IMAGE,
-    tags: ["Панорама", "Онсэн", "Сейф"],
-    saved: false,
-  },
+  { id: 1, name: "Grand Palace Hotel", city: "Дубай", stars: 5, rating: 4.9, reviews: 2841, price: 18500, oldPrice: 24000, image: HOTEL_IMAGE, tags: ["Бассейн", "SPA", "Завтрак"] },
+  { id: 2, name: "Eiffel Luxe Residence", city: "Париж", stars: 5, rating: 4.7, reviews: 1523, price: 22300, oldPrice: null, image: PARIS_IMAGE, tags: ["Вид на башню", "Ресторан", "Трансфер"] },
+  { id: 3, name: "Azure Beach Resort", city: "Бали", stars: 4, rating: 4.8, reviews: 3201, price: 12900, oldPrice: 16000, image: HERO_IMAGE, tags: ["Пляж", "Бассейн", "Дайвинг"] },
+  { id: 4, name: "Tokyo Sky Tower Suite", city: "Токио", stars: 5, rating: 4.6, reviews: 987, price: 31000, oldPrice: null, image: HOTEL_IMAGE, tags: ["Панорама", "Онсэн", "Сейф"] },
 ];
 
 const tickets = [
-  { id: 1, from: "Москва", to: "Дубай", date: "15 марта", airline: "Emirates", duration: "5ч 20м", price: 28900, class: "Бизнес" },
-  { id: 2, from: "Москва", to: "Париж", date: "20 марта", airline: "Air France", duration: "3ч 45м", price: 14500, class: "Эконом" },
-  { id: 3, from: "Москва", to: "Бали", date: "1 апреля", airline: "Garuda", duration: "12ч 30м", price: 42000, class: "Эконом" },
+  { id: 1, from: "Москва", fromCode: "SVO", to: "Дубай", toCode: "DXB", date: "15 мар", airline: "Emirates", duration: "5ч 20м", price: 28900, cls: "Бизнес" },
+  { id: 2, from: "Москва", fromCode: "SVO", to: "Париж", toCode: "CDG", date: "20 мар", airline: "Air France", duration: "3ч 45м", price: 14500, cls: "Эконом" },
+  { id: 3, from: "Москва", fromCode: "SVO", to: "Бали", toCode: "DPS", date: "1 апр", airline: "Garuda", duration: "12ч 30м", price: 42000, cls: "Эконом" },
 ];
 
 const bookings = [
@@ -80,731 +30,578 @@ const bookings = [
 ];
 
 const reviewsList = [
-  { id: 1, author: "Анна М.", hotel: "Grand Palace Hotel", rating: 5, date: "12 фев 2026", text: "Невероятный отель! Сервис на высшем уровне, завтрак великолепный. Обязательно вернёмся.", avatar: "👩‍💼" },
-  { id: 2, author: "Дмитрий К.", hotel: "Azure Beach Resort", rating: 5, date: "3 фев 2026", text: "Лучший отдых в жизни! Пляж прямо у номера, персонал внимательный. Рекомендую всем!", avatar: "👨‍💻" },
-  { id: 3, author: "Елена С.", hotel: "Eiffel Luxe Residence", rating: 4, date: "28 янв 2026", text: "Отличное расположение, вид на Эйфелеву башню. Немного шумно по вечерам, но это Париж!", avatar: "👩‍🎨" },
+  { id: 1, author: "Анна М.", hotel: "Grand Palace Hotel", rating: 5, date: "12 фев", text: "Невероятный отель! Сервис на высшем уровне, завтрак великолепный.", avatar: "👩‍💼" },
+  { id: 2, author: "Дмитрий К.", hotel: "Azure Beach Resort", rating: 5, date: "3 фев", text: "Лучший отдых в жизни! Пляж прямо у номера, персонал внимательный.", avatar: "👨‍💻" },
+  { id: 3, author: "Елена С.", hotel: "Eiffel Luxe Residence", rating: 4, date: "28 янв", text: "Отличное расположение, вид на Эйфелеву башню. Немного шумно по вечерам.", avatar: "👩‍🎨" },
 ];
 
 const destinations = [
-  { city: "Дубай", country: "ОАЭ", from: "от 28 900 ₽", emoji: "🏙️", bg: "from-amber-400 to-orange-500" },
-  { city: "Бали", country: "Индонезия", from: "от 42 000 ₽", emoji: "🌴", bg: "from-green-400 to-teal-500" },
-  { city: "Париж", country: "Франция", from: "от 14 500 ₽", emoji: "🗼", bg: "from-blue-400 to-indigo-500" },
-  { city: "Токио", country: "Япония", from: "от 58 000 ₽", emoji: "🗾", bg: "from-pink-400 to-rose-500" },
+  { city: "Дубай", country: "ОАЭ", emoji: "🏙️", bg: "from-amber-400 to-orange-500", price: "28 900 ₽" },
+  { city: "Бали", country: "Индонезия", emoji: "🌴", bg: "from-emerald-400 to-teal-500", price: "42 000 ₽" },
+  { city: "Париж", country: "Франция", emoji: "🗼", bg: "from-blue-400 to-indigo-600", price: "14 500 ₽" },
+  { city: "Токио", country: "Япония", emoji: "🗾", bg: "from-pink-400 to-rose-500", price: "58 000 ₽" },
 ];
 
 export default function Index() {
   const [page, setPage] = useState<Page>("home");
-  const [searchTab, setSearchTab] = useState("hotels");
+  const [searchTab, setSearchTab] = useState<"hotels" | "flights">("hotels");
   const [savedItems, setSavedItems] = useState<number[]>([1, 3]);
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [selectedHotel, setSelectedHotel] = useState<typeof hotels[0] | null>(null);
   const [sortBy, setSortBy] = useState("rating");
-  const [filterStars, setFilterStars] = useState<number | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
-  const toggleSave = (id: number) => {
-    setSavedItems(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-  };
+  const toggleSave = (id: number) =>
+    setSavedItems(p => p.includes(id) ? p.filter(i => i !== id) : [...p, id]);
 
   const filteredHotels = hotels
-    .filter(h => !filterStars || h.stars === filterStars)
-    .filter(h => h.price >= priceRange[0] && h.price <= priceRange[1])
+    .filter(h => h.price <= priceRange[1])
     .sort((a, b) => sortBy === "rating" ? b.rating - a.rating : a.price - b.price);
 
   const savedHotels = hotels.filter(h => savedItems.includes(h.id));
 
+  const navItems = [
+    { id: "home", icon: "Home", label: "Главная" },
+    { id: "results", icon: "Search", label: "Поиск" },
+    { id: "saved", icon: "Heart", label: "Избранное" },
+    { id: "reviews", icon: "Star", label: "Отзывы" },
+    { id: "profile", icon: "User", label: "Профиль" },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 font-inter">
+    <div className="min-h-screen bg-[#F5F5F7] font-inter max-w-md mx-auto relative overflow-x-hidden">
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-dark">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <button onClick={() => setPage("home")} className="flex items-center gap-2">
-            <div className="w-8 h-8 gradient-brand rounded-lg flex items-center justify-center">
-              <Icon name="Globe" size={16} className="text-white" />
-            </div>
-            <span className="font-montserrat font-800 text-white text-xl font-extrabold tracking-tight">TravelGo</span>
-          </button>
-
-          <div className="flex items-center gap-1">
-            {[
-              { id: "home", icon: "Search", label: "Поиск" },
-              { id: "saved", icon: "Heart", label: "Избранное" },
-              { id: "reviews", icon: "Star", label: "Отзывы" },
-              { id: "profile", icon: "User", label: "Кабинет" },
-            ].map(item => (
+      {/* ── BOTTOM NAV ── */}
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-white/90 backdrop-blur-xl border-t border-gray-100">
+        <div className="flex items-center justify-around px-2 pb-safe pt-2 pb-4">
+          {navItems.map(item => {
+            const active = page === item.id || (item.id === "results" && page === "booking");
+            return (
               <button
                 key={item.id}
                 onClick={() => setPage(item.id as Page)}
-                className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all ${
-                  page === item.id ? "bg-white/20 text-white" : "text-white/60 hover:text-white hover:bg-white/10"
-                }`}
+                className="flex flex-col items-center gap-0.5 px-3 py-1 relative"
               >
-                <Icon name={item.icon} fallback="CircleAlert" size={18} />
-                <span className="text-xs hidden sm:block">{item.label}</span>
+                {active && (
+                  <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-1 gradient-brand rounded-full" />
+                )}
+                <Icon
+                  name={item.icon}
+                  fallback="CircleAlert"
+                  size={22}
+                  className={active ? "text-brand-purple" : "text-gray-400"}
+                />
+                <span className={`text-[10px] font-medium ${active ? "text-brand-purple" : "text-gray-400"}`}>
+                  {item.label}
+                </span>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </nav>
 
-      {/* HOME */}
+      {/* ════════════ HOME ════════════ */}
       {page === "home" && (
-        <div>
-          {/* HERO */}
-          <div className="relative h-screen min-h-[600px] gradient-hero overflow-hidden">
-            <img src={HERO_IMAGE} alt="hero" className="absolute inset-0 w-full h-full object-cover opacity-30" />
-            <div className="absolute inset-0 gradient-hero opacity-70" />
-
-            {/* Floating badges */}
-            <div className="absolute top-28 left-8 glass rounded-2xl px-4 py-3 animate-fade-in hidden lg:flex items-center gap-3">
-              <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center text-lg">🏆</div>
-              <div>
-                <div className="text-white font-semibold text-sm">Лучшая цена</div>
-                <div className="text-white/60 text-xs">Гарантировано</div>
+        <div className="pb-24">
+          {/* Hero card */}
+          <div className="relative h-72 overflow-hidden rounded-b-[2.5rem]">
+            <img src={HERO_IMAGE} alt="hero" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/70" />
+            <div className="relative z-10 p-6 pt-14 h-full flex flex-col justify-between">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white/70 text-sm">Привет, Александр 👋</p>
+                  <h1 className="font-montserrat text-2xl font-black text-white leading-tight">
+                    Куда летим<br />сегодня?
+                  </h1>
+                </div>
+                <button className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                  <Icon name="Bell" size={18} className="text-white" />
+                </button>
               </div>
-            </div>
-            <div className="absolute top-36 right-8 glass rounded-2xl px-4 py-3 animate-fade-in hidden lg:flex items-center gap-3" style={{animationDelay: '0.2s'}}>
-              <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center text-lg">✅</div>
-              <div>
-                <div className="text-white font-semibold text-sm">Безопасная оплата</div>
-                <div className="text-white/60 text-xs">SSL шифрование</div>
-              </div>
-            </div>
-
-            <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 pt-16">
-              <Badge className="mb-6 bg-white/10 text-white border-white/20 px-4 py-1.5 text-sm font-medium animate-fade-in">
-                ✈️ Более 50 000 направлений
-              </Badge>
-              <h1 className="font-montserrat text-5xl md:text-7xl font-black text-white text-center leading-tight mb-4 animate-fade-in" style={{animationDelay:'0.1s'}}>
-                Весь мир —<br />
-                <span className="text-gradient">в одном месте</span>
-              </h1>
-              <p className="text-white/70 text-lg md:text-xl text-center max-w-lg mb-10 animate-fade-in" style={{animationDelay:'0.2s'}}>
-                Отели, авиабилеты и экскурсии по лучшим ценам. Безопасная оплата и мгновенное подтверждение.
-              </p>
-
-              {/* Search box */}
-              <div className="w-full max-w-3xl glass rounded-3xl p-2 animate-fade-in" style={{animationDelay:'0.3s'}}>
-                <Tabs value={searchTab} onValueChange={setSearchTab} className="w-full">
-                  <TabsList className="bg-white/10 border-0 rounded-2xl mb-3 w-full">
-                    <TabsTrigger value="hotels" className="flex-1 text-white data-[state=active]:bg-white data-[state=active]:text-brand-purple rounded-xl gap-2">
-                      <Icon name="Building2" size={15} /> Отели
-                    </TabsTrigger>
-                    <TabsTrigger value="flights" className="flex-1 text-white data-[state=active]:bg-white data-[state=active]:text-brand-purple rounded-xl gap-2">
-                      <Icon name="Plane" size={15} /> Билеты
-                    </TabsTrigger>
-                    <TabsTrigger value="tours" className="flex-1 text-white data-[state=active]:bg-white data-[state=active]:text-brand-purple rounded-xl gap-2">
-                      <Icon name="Map" size={15} /> Туры
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <div className="flex flex-col sm:flex-row gap-2 p-2">
-                    <div className="flex-1 bg-white rounded-2xl flex items-center gap-3 px-4 py-3">
-                      <Icon name="MapPin" size={18} className="text-brand-purple shrink-0" />
-                      <input placeholder={searchTab === "hotels" ? "Куда едем?" : searchTab === "flights" ? "Откуда летим?" : "Направление"}
-                        className="bg-transparent outline-none text-gray-800 w-full font-medium placeholder:text-gray-400" />
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="bg-white rounded-2xl flex items-center gap-2 px-4 py-3">
-                        <Icon name="Calendar" size={16} className="text-brand-purple" />
-                        <input placeholder="Дата" className="bg-transparent outline-none text-gray-800 w-24 font-medium placeholder:text-gray-400" />
-                      </div>
-                      <button
-                        onClick={() => setPage("results")}
-                        className="gradient-brand text-white px-6 py-3 rounded-2xl font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap"
-                      >
-                        <Icon name="Search" size={16} />
-                        Найти
-                      </button>
-                    </div>
-                  </div>
-                </Tabs>
-              </div>
-
-              {/* Stats */}
-              <div className="flex gap-8 mt-10 animate-fade-in" style={{animationDelay:'0.4s'}}>
-                {[
-                  { val: "50K+", label: "Отелей" },
-                  { val: "200+", label: "Стран" },
-                  { val: "2M+", label: "Клиентов" },
-                ].map(s => (
-                  <div key={s.val} className="text-center">
-                    <div className="font-montserrat text-2xl font-black text-white">{s.val}</div>
-                    <div className="text-white/50 text-sm">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Scroll indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse-soft">
-              <Icon name="ChevronDown" size={28} className="text-white/40" />
+              {/* Search pill */}
+              <button
+                onClick={() => setPage("results")}
+                className="bg-white rounded-2xl px-4 py-3.5 flex items-center gap-3 shadow-lg"
+              >
+                <div className="w-8 h-8 gradient-brand rounded-xl flex items-center justify-center shrink-0">
+                  <Icon name="Search" size={14} className="text-white" />
+                </div>
+                <span className="text-gray-400 text-sm flex-1 text-left">Отель, билет, тур...</span>
+                <div className="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <Icon name="SlidersHorizontal" size={14} className="text-gray-500" />
+                </div>
+              </button>
             </div>
           </div>
 
-          {/* DESTINATIONS */}
-          <div className="max-w-7xl mx-auto px-4 py-16">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="font-montserrat text-3xl font-bold text-gray-900">Популярные направления</h2>
-                <p className="text-gray-500 mt-1">Самые востребованные маршруты этого сезона</p>
-              </div>
-              <Button variant="outline" onClick={() => setPage("results")} className="hidden sm:flex gap-2 border-brand-purple text-brand-purple hover:bg-brand-purple hover:text-white">
-                Все направления <Icon name="ArrowRight" size={16} />
-              </Button>
+          {/* Category pills */}
+          <div className="px-4 pt-5">
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {[
+                { icon: "Building2", label: "Отели", active: true },
+                { icon: "Plane", label: "Билеты", active: false },
+                { icon: "Map", label: "Туры", active: false },
+                { icon: "Car", label: "Трансфер", active: false },
+              ].map(c => (
+                <button
+                  key={c.label}
+                  onClick={() => setPage("results")}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all shrink-0 ${
+                    c.active
+                      ? "gradient-brand text-white shadow-md shadow-purple-200"
+                      : "bg-white text-gray-600 border border-gray-100"
+                  }`}
+                >
+                  <Icon name={c.icon} fallback="CircleAlert" size={15} />
+                  {c.label}
+                </button>
+              ))}
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-              {destinations.map((d, i) => (
+          {/* Destinations horizontal scroll */}
+          <div className="pt-6 px-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-montserrat font-bold text-gray-900 text-lg">Направления</h2>
+              <button onClick={() => setPage("results")} className="text-brand-purple text-sm font-semibold">Все</button>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4">
+              {destinations.map(d => (
                 <button
                   key={d.city}
                   onClick={() => setPage("results")}
-                  className={`relative overflow-hidden rounded-3xl p-6 bg-gradient-to-br ${d.bg} card-hover text-left`}
-                  style={{ animationDelay: `${i * 0.1}s` }}
+                  className={`shrink-0 w-36 h-44 rounded-3xl bg-gradient-to-br ${d.bg} relative overflow-hidden active:scale-95 transition-transform`}
                 >
-                  <div className="text-4xl mb-3">{d.emoji}</div>
-                  <div className="font-montserrat font-bold text-white text-xl">{d.city}</div>
-                  <div className="text-white/70 text-sm mb-2">{d.country}</div>
-                  <div className="text-white font-semibold text-sm">{d.from}</div>
-                  <div className="absolute top-3 right-3 bg-white/20 rounded-full p-1.5">
-                    <Icon name="ArrowUpRight" size={14} className="text-white" />
+                  <div className="absolute inset-0 flex flex-col justify-between p-4">
+                    <span className="text-4xl">{d.emoji}</span>
+                    <div className="text-left">
+                      <div className="font-montserrat font-black text-white text-lg leading-tight">{d.city}</div>
+                      <div className="text-white/70 text-xs">{d.country}</div>
+                      <div className="text-white font-bold text-sm mt-1">от {d.price}</div>
+                    </div>
                   </div>
                 </button>
               ))}
             </div>
+          </div>
 
-            {/* TOP HOTELS */}
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="font-montserrat text-3xl font-bold text-gray-900">Топ отели</h2>
-                <p className="text-gray-500 mt-1">По отзывам наших путешественников</p>
+          {/* Top hotels */}
+          <div className="pt-6 px-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-montserrat font-bold text-gray-900 text-lg">Топ отели</h2>
+              <button onClick={() => setPage("results")} className="text-brand-purple text-sm font-semibold">Все</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              {hotels.slice(0, 3).map(hotel => (
+                <button
+                  key={hotel.id}
+                  onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
+                  className="bg-white rounded-3xl overflow-hidden flex gap-0 shadow-sm active:scale-[0.98] transition-transform text-left"
+                >
+                  <div className="relative w-28 shrink-0">
+                    <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
+                    {hotel.oldPrice && (
+                      <div className="absolute top-2 left-2 bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-lg">
+                        -{Math.round((1 - hotel.price / hotel.oldPrice) * 100)}%
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 p-3.5">
+                    <div className="flex items-start justify-between gap-1">
+                      <div>
+                        <div className="font-montserrat font-bold text-gray-900 text-sm leading-tight line-clamp-1">{hotel.name}</div>
+                        <div className="flex items-center gap-1 text-gray-400 text-xs mt-0.5">
+                          <Icon name="MapPin" size={10} />{hotel.city}
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); toggleSave(hotel.id); }}
+                        className="shrink-0 w-7 h-7 flex items-center justify-center"
+                      >
+                        <Icon name="Heart" size={16} className={savedItems.includes(hotel.id) ? "text-red-500 fill-red-500" : "text-gray-300"} />
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {hotel.tags.slice(0, 2).map(t => (
+                        <span key={t} className="text-[10px] bg-purple-50 text-brand-purple px-2 py-0.5 rounded-full">{t}</span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <div>
+                        <span className="font-montserrat font-black text-gray-900 text-base">{hotel.price.toLocaleString()}</span>
+                        <span className="text-gray-400 text-xs"> ₽/н</span>
+                      </div>
+                      <div className="flex items-center gap-1 bg-green-50 px-2 py-0.5 rounded-full">
+                        <span className="text-green-600 font-bold text-xs">{hotel.rating}</span>
+                        <Icon name="Star" size={10} className="text-green-500 fill-green-500" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Promo banner */}
+          <div className="mx-4 mt-6 gradient-brand rounded-3xl p-5 flex items-center gap-4">
+            <div className="text-4xl">🔒</div>
+            <div>
+              <div className="font-montserrat font-bold text-white text-base">Безопасная оплата</div>
+              <div className="text-white/70 text-xs mt-0.5">Карта, СБП, Apple Pay. Возврат 24ч</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ════════════ RESULTS ════════════ */}
+      {page === "results" && (
+        <div className="pb-24">
+          {/* Header */}
+          <div className="gradient-hero px-4 pt-14 pb-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 bg-white/10 backdrop-blur-md rounded-2xl flex items-center gap-2 px-4 py-3">
+                <Icon name="Search" size={16} className="text-white/60" />
+                <input placeholder="Куда едем?" className="bg-transparent outline-none text-white placeholder:text-white/40 text-sm w-full" />
               </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${showFilters ? "bg-white text-brand-purple" : "bg-white/10 text-white"}`}
+              >
+                <Icon name="SlidersHorizontal" size={18} />
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {hotels.map((hotel, i) => (
-                <div
+            {/* Tabs */}
+            <div className="flex gap-2">
+              {[
+                { val: "hotels" as const, label: "Отели", icon: "Building2" },
+                { val: "flights" as const, label: "Билеты", icon: "Plane" },
+              ].map(t => (
+                <button
+                  key={t.val}
+                  onClick={() => setSearchTab(t.val)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                    searchTab === t.val ? "bg-white text-brand-purple" : "text-white/60"
+                  }`}
+                >
+                  <Icon name={t.icon} fallback="CircleAlert" size={14} />
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Filters panel */}
+          {showFilters && (
+            <div className="bg-white mx-4 mt-3 rounded-3xl p-5 shadow-sm animate-fade-in">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-montserrat font-bold text-gray-900">Фильтры</h3>
+                <button onClick={() => setShowFilters(false)}>
+                  <Icon name="X" size={18} className="text-gray-400" />
+                </button>
+              </div>
+              <div className="mb-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">
+                  Макс. цена: {priceRange[1].toLocaleString()} ₽
+                </div>
+                <Slider min={5000} max={50000} step={1000} value={priceRange} onValueChange={setPriceRange} />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-gray-700 mb-2">Сортировать</div>
+                <div className="flex gap-2">
+                  {[{ v: "rating", l: "По рейтингу" }, { v: "price", l: "По цене" }].map(s => (
+                    <button
+                      key={s.v}
+                      onClick={() => setSortBy(s.v)}
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all ${
+                        sortBy === s.v ? "gradient-brand text-white" : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {s.l}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Results count */}
+          <div className="px-4 pt-4 pb-1 flex items-center justify-between">
+            <span className="text-sm text-gray-500 font-medium">{filteredHotels.length} вариантов</span>
+          </div>
+
+          {/* Hotels */}
+          {searchTab === "hotels" && (
+            <div className="px-4 flex flex-col gap-3 pt-2">
+              {filteredHotels.map(hotel => (
+                <button
                   key={hotel.id}
-                  className="bg-white rounded-3xl overflow-hidden shadow-sm card-hover cursor-pointer"
-                  style={{ animationDelay: `${i * 0.1}s` }}
                   onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
+                  className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform text-left w-full"
                 >
                   <div className="relative">
-                    <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover" />
+                    <img src={hotel.image} alt={hotel.name} className="w-full h-52 object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <button
-                      className="absolute top-3 right-3 bg-white/90 rounded-full p-2 hover:bg-white transition-colors"
-                      onClick={(e) => { e.stopPropagation(); toggleSave(hotel.id); }}
+                      onClick={e => { e.stopPropagation(); toggleSave(hotel.id); }}
+                      className="absolute top-3 right-3 w-9 h-9 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center"
                     >
-                      <Icon name="Heart" size={16} className={savedItems.includes(hotel.id) ? "text-red-500 fill-red-500" : "text-gray-400"} />
+                      <Icon name="Heart" size={16} className={savedItems.includes(hotel.id) ? "text-red-400 fill-red-400" : "text-white"} />
                     </button>
                     {hotel.oldPrice && (
-                      <Badge className="absolute top-3 left-3 bg-brand-orange text-white border-0">
+                      <Badge className="absolute top-3 left-3 bg-brand-orange text-white border-0 text-xs">
                         -{Math.round((1 - hotel.price / hotel.oldPrice) * 100)}%
                       </Badge>
                     )}
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center gap-1 mb-1">
-                      {"★".repeat(hotel.stars).split("").map((_, i) => (
-                        <span key={i} className="text-yellow-400 text-xs">★</span>
-                      ))}
-                    </div>
-                    <h3 className="font-montserrat font-bold text-gray-900 text-sm mb-1 line-clamp-1">{hotel.name}</h3>
-                    <div className="flex items-center gap-1 text-gray-500 text-xs mb-3">
-                      <Icon name="MapPin" size={12} />
-                      {hotel.city}
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {hotel.tags.slice(0, 2).map(tag => (
-                        <span key={tag} className="text-xs bg-purple-50 text-brand-purple px-2 py-0.5 rounded-full">{tag}</span>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-montserrat font-black text-gray-900">{hotel.price.toLocaleString()} ₽</span>
-                        <span className="text-gray-400 text-xs">/ночь</span>
-                        {hotel.oldPrice && <div className="text-gray-400 text-xs line-through">{hotel.oldPrice.toLocaleString()} ₽</div>}
-                      </div>
-                      <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-full">
-                        <span className="text-green-600 font-bold text-sm">{hotel.rating}</span>
-                        <Icon name="Star" size={12} className="text-green-500 fill-green-500" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <div className="mt-16 gradient-brand rounded-3xl p-10 text-center">
-              <h2 className="font-montserrat text-3xl font-black text-white mb-3">Безопасная оплата</h2>
-              <p className="text-white/80 mb-6 max-w-md mx-auto">Поддерживаем все популярные способы оплаты. Возврат средств при отмене за 24 часа.</p>
-              <div className="flex justify-center gap-4 flex-wrap">
-                {["💳 Банковская карта", "🏦 СБП", "📱 Apple Pay", "🔒 Защита покупки"].map(m => (
-                  <span key={m} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">{m}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* RESULTS */}
-      {page === "results" && (
-        <div className="pt-16">
-          <div className="gradient-hero px-4 py-12">
-            <div className="max-w-7xl mx-auto">
-              <h1 className="font-montserrat text-3xl font-bold text-white mb-2">Результаты поиска</h1>
-              <p className="text-white/60">Найдено {filteredHotels.length} вариантов</p>
-            </div>
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
-            {/* Filters */}
-            <div className="w-64 shrink-0 hidden lg:block">
-              <div className="bg-white rounded-3xl p-6 shadow-sm sticky top-24">
-                <h3 className="font-montserrat font-bold text-gray-900 mb-5">Фильтры</h3>
-
-                <div className="mb-6">
-                  <div className="text-sm font-semibold text-gray-700 mb-3">Звёздность</div>
-                  <div className="flex gap-2 flex-wrap">
-                    {[null, 4, 5].map(s => (
-                      <button
-                        key={s}
-                        onClick={() => setFilterStars(s)}
-                        className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
-                          filterStars === s ? "gradient-brand text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                      >
-                        {s === null ? "Все" : `${s}★`}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <div className="text-sm font-semibold text-gray-700 mb-3">
-                    Цена за ночь: до {priceRange[1].toLocaleString()} ₽
-                  </div>
-                  <Slider
-                    min={0} max={50000} step={1000}
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                    className="w-full"
-                  />
-                </div>
-
-                <div className="mb-6">
-                  <div className="text-sm font-semibold text-gray-700 mb-3">Сортировать по</div>
-                  {[
-                    { val: "rating", label: "Рейтингу" },
-                    { val: "price", label: "Цене" },
-                  ].map(s => (
-                    <button
-                      key={s.val}
-                      onClick={() => setSortBy(s.val)}
-                      className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium mb-1.5 transition-all ${
-                        sortBy === s.val ? "bg-purple-50 text-brand-purple" : "hover:bg-gray-50 text-gray-600"
-                      }`}
-                    >
-                      {sortBy === s.val && <span className="mr-2">✓</span>}{s.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Hotel grid */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-5">
-                <Tabs value={searchTab} onValueChange={setSearchTab}>
-                  <TabsList>
-                    <TabsTrigger value="hotels" className="gap-1.5"><Icon name="Building2" size={14} />Отели</TabsTrigger>
-                    <TabsTrigger value="flights" className="gap-1.5"><Icon name="Plane" size={14} />Билеты</TabsTrigger>
-                    <TabsTrigger value="tours" className="gap-1.5"><Icon name="Map" size={14} />Туры</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-                <span className="text-sm text-gray-500">{filteredHotels.length} вариантов</span>
-              </div>
-
-              {searchTab === "hotels" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {filteredHotels.map(hotel => (
-                    <div
-                      key={hotel.id}
-                      className="bg-white rounded-3xl overflow-hidden shadow-sm card-hover cursor-pointer"
-                      onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
-                    >
-                      <div className="relative">
-                        <img src={hotel.image} alt={hotel.name} className="w-full h-52 object-cover" />
-                        <button
-                          className="absolute top-3 right-3 bg-white/90 rounded-full p-2"
-                          onClick={(e) => { e.stopPropagation(); toggleSave(hotel.id); }}
-                        >
-                          <Icon name="Heart" size={16} className={savedItems.includes(hotel.id) ? "text-red-500 fill-red-500" : "text-gray-400"} />
-                        </button>
-                        {hotel.oldPrice && (
-                          <Badge className="absolute top-3 left-3 bg-brand-orange text-white border-0">
-                            -{Math.round((1 - hotel.price / hotel.oldPrice) * 100)}%
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="p-5">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <div className="flex gap-0.5 mb-1">
-                              {"★".repeat(hotel.stars).split("").map((_, i) => (
-                                <span key={i} className="text-yellow-400 text-sm">★</span>
-                              ))}
-                            </div>
-                            <h3 className="font-montserrat font-bold text-gray-900">{hotel.name}</h3>
-                            <div className="flex items-center gap-1 text-gray-500 text-sm mt-1">
-                              <Icon name="MapPin" size={13} />{hotel.city}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-montserrat font-black text-gray-900 text-lg">{hotel.price.toLocaleString()} ₽</div>
-                            <div className="text-gray-400 text-xs">/ночь</div>
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 mt-3">
-                          {hotel.tags.map(tag => (
-                            <span key={tag} className="text-xs bg-purple-50 text-brand-purple px-2.5 py-1 rounded-full">{tag}</span>
-                          ))}
-                        </div>
-                        <div className="flex items-center justify-between mt-4">
-                          <div className="flex items-center gap-1.5">
-                            <div className="flex items-center gap-1 bg-green-50 px-2.5 py-1 rounded-full">
-                              <span className="text-green-600 font-bold text-sm">{hotel.rating}</span>
-                              <Icon name="Star" size={12} className="text-green-500 fill-green-500" />
-                            </div>
-                            <span className="text-gray-400 text-xs">{hotel.reviews.toLocaleString()} отзывов</span>
-                          </div>
-                          <button className="gradient-brand text-white text-sm px-4 py-2 rounded-xl font-semibold hover:opacity-90">
-                            Забронировать
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {searchTab === "flights" && (
-                <div className="flex flex-col gap-4">
-                  {tickets.map(t => (
-                    <div key={t.id} className="bg-white rounded-3xl p-6 shadow-sm card-hover cursor-pointer" onClick={() => setPage("booking")}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                          <div className="text-center">
-                            <div className="font-montserrat font-black text-2xl text-gray-900">{t.from}</div>
-                            <div className="text-gray-400 text-sm">{t.date}</div>
-                          </div>
-                          <div className="flex flex-col items-center gap-1">
-                            <div className="text-xs text-gray-400">{t.duration}</div>
-                            <div className="flex items-center gap-1">
-                              <div className="w-2 h-2 rounded-full bg-brand-purple" />
-                              <div className="w-20 h-px bg-gray-300" />
-                              <Icon name="Plane" size={16} className="text-brand-purple" />
-                              <div className="w-20 h-px bg-gray-300" />
-                              <div className="w-2 h-2 rounded-full bg-brand-purple" />
-                            </div>
-                            <div className="text-xs text-gray-400">{t.airline}</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="font-montserrat font-black text-2xl text-gray-900">{t.to}</div>
-                            <Badge variant="outline" className="text-xs border-brand-purple text-brand-purple mt-1">{t.class}</Badge>
+                    <div className="absolute bottom-3 left-4 right-4">
+                      <div className="flex items-end justify-between">
+                        <div>
+                          <div className="font-montserrat font-black text-white text-lg leading-tight">{hotel.name}</div>
+                          <div className="flex items-center gap-1 text-white/70 text-xs mt-0.5">
+                            <Icon name="MapPin" size={11} />{hotel.city}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-montserrat font-black text-2xl text-gray-900">{t.price.toLocaleString()} ₽</div>
-                          <button className="gradient-brand text-white text-sm px-5 py-2.5 rounded-xl font-semibold hover:opacity-90 mt-2 block">
-                            Купить
-                          </button>
+                          <div className="font-montserrat font-black text-white text-xl">{hotel.price.toLocaleString()} ₽</div>
+                          <div className="text-white/60 text-xs">за ночь</div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {searchTab === "tours" && (
-                <div className="flex items-center justify-center h-64 bg-white rounded-3xl">
-                  <div className="text-center">
-                    <div className="text-5xl mb-4">🗺️</div>
-                    <div className="font-montserrat font-bold text-gray-900">Туры скоро появятся</div>
-                    <div className="text-gray-400 text-sm mt-1">Мы работаем над лучшими предложениями</div>
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* BOOKING */}
-      {page === "booking" && (
-        <div className="pt-16">
-          <div className="gradient-hero px-4 py-12">
-            <div className="max-w-3xl mx-auto">
-              <button onClick={() => setPage("results")} className="flex items-center gap-2 text-white/60 hover:text-white mb-4 transition-colors">
-                <Icon name="ArrowLeft" size={16} /> Назад
-              </button>
-              <h1 className="font-montserrat text-3xl font-bold text-white">Оформление бронирования</h1>
-            </div>
-          </div>
-
-          <div className="max-w-3xl mx-auto px-4 py-8">
-            {selectedHotel && (
-              <div className="bg-white rounded-3xl p-5 mb-6 shadow-sm flex gap-4">
-                <img src={selectedHotel.image} alt={selectedHotel.name} className="w-24 h-24 rounded-2xl object-cover" />
-                <div className="flex-1">
-                  <h3 className="font-montserrat font-bold text-gray-900">{selectedHotel.name}</h3>
-                  <div className="flex items-center gap-1 text-gray-500 text-sm mt-1">
-                    <Icon name="MapPin" size={13} />{selectedHotel.city}
-                  </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Badge className="bg-green-50 text-green-600 border-0">{selectedHotel.rating} ★</Badge>
-                    <span className="font-montserrat font-black text-gray-900">{selectedHotel.price.toLocaleString()} ₽/ночь</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="bg-white rounded-3xl p-6 shadow-sm mb-6">
-              <h3 className="font-montserrat font-bold text-gray-900 mb-5">Даты и гости</h3>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Заезд</label>
-                  <div className="border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-2">
-                    <Icon name="Calendar" size={16} className="text-brand-purple" />
-                    <input defaultValue="15 марта 2026" className="outline-none text-gray-800 w-full text-sm" />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Выезд</label>
-                  <div className="border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-2">
-                    <Icon name="Calendar" size={16} className="text-brand-purple" />
-                    <input defaultValue="22 марта 2026" className="outline-none text-gray-800 w-full text-sm" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Количество гостей</label>
-                <div className="border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-2">
-                  <Icon name="Users" size={16} className="text-brand-purple" />
-                  <select className="outline-none text-gray-800 w-full text-sm bg-transparent">
-                    <option>1 взрослый</option>
-                    <option>2 взрослых</option>
-                    <option>2 взрослых, 1 ребёнок</option>
-                    <option>2 взрослых, 2 детей</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl p-6 shadow-sm mb-6">
-              <h3 className="font-montserrat font-bold text-gray-900 mb-5">Данные гостя</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Имя</label>
-                  <Input placeholder="Александр" className="rounded-xl" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Фамилия</label>
-                  <Input placeholder="Петров" className="rounded-xl" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Email</label>
-                  <Input type="email" placeholder="email@example.com" className="rounded-xl" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Телефон</label>
-                  <Input type="tel" placeholder="+7 (999) 000-00-00" className="rounded-xl" />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl p-6 shadow-sm mb-6">
-              <h3 className="font-montserrat font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <Icon name="CreditCard" size={20} className="text-brand-purple" /> Оплата
-              </h3>
-              <div className="flex gap-3 mb-5">
-                {["💳 Карта", "🏦 СБП", "📱 Apple Pay"].map((m, i) => (
-                  <button key={m} className={`flex-1 py-3 rounded-xl text-sm font-medium transition-all border-2 ${
-                    i === 0 ? "border-brand-purple bg-purple-50 text-brand-purple" : "border-gray-200 text-gray-600 hover:border-brand-purple"
-                  }`}>{m}</button>
-                ))}
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Номер карты</label>
-                  <Input placeholder="0000 0000 0000 0000" className="rounded-xl font-mono" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">Срок действия</label>
-                    <Input placeholder="MM/YY" className="rounded-xl" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">CVV</label>
-                    <Input placeholder="•••" type="password" className="rounded-xl" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl p-6 shadow-sm mb-6">
-              <h3 className="font-montserrat font-bold text-gray-900 mb-4">Итого</h3>
-              {[
-                { label: "Стоимость (7 ночей)", val: selectedHotel ? `${(selectedHotel.price * 7).toLocaleString()} ₽` : "129 500 ₽" },
-                { label: "Сервисный сбор", val: "2 590 ₽" },
-                { label: "Налоги и сборы", val: "1 300 ₽" },
-              ].map(row => (
-                <div key={row.label} className="flex justify-between py-2.5 border-b border-gray-100 last:border-0">
-                  <span className="text-gray-600 text-sm">{row.label}</span>
-                  <span className="font-semibold text-gray-900">{row.val}</span>
-                </div>
-              ))}
-              <div className="flex justify-between pt-4 mt-2">
-                <span className="font-montserrat font-bold text-gray-900">К оплате</span>
-                <span className="font-montserrat font-black text-2xl text-brand-purple">{selectedHotel ? `${(selectedHotel.price * 7 + 3890).toLocaleString()} ₽` : "133 390 ₽"}</span>
-              </div>
-            </div>
-
-            <button className="w-full gradient-brand text-white py-4 rounded-2xl font-montserrat font-bold text-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
-              <Icon name="Lock" size={20} /> Оплатить безопасно
-            </button>
-            <p className="text-center text-gray-400 text-xs mt-3">🔒 Защищено SSL шифрованием. Возврат в течение 24 часов.</p>
-          </div>
-        </div>
-      )}
-
-      {/* PROFILE */}
-      {page === "profile" && (
-        <div className="pt-16">
-          <div className="gradient-hero px-4 py-12">
-            <div className="max-w-3xl mx-auto flex items-center gap-5">
-              <div className="w-20 h-20 gradient-brand rounded-3xl flex items-center justify-center text-3xl">👤</div>
-              <div>
-                <h1 className="font-montserrat text-2xl font-bold text-white">Александр Петров</h1>
-                <div className="text-white/60">alex.petrov@email.com</div>
-                <Badge className="mt-2 bg-brand-orange text-white border-0">✈️ Premium путешественник</Badge>
-              </div>
-            </div>
-          </div>
-
-          <div className="max-w-3xl mx-auto px-4 py-8">
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              {[
-                { val: "12", label: "Поездок", icon: "Globe" },
-                { val: "3", label: "Стран", icon: "Map" },
-                { val: "48K", label: "Миль", icon: "Plane" },
-              ].map(s => (
-                <div key={s.label} className="bg-white rounded-3xl p-5 shadow-sm text-center card-hover">
-                  <Icon name={s.icon} fallback="CircleAlert" size={24} className="text-brand-purple mx-auto mb-2" />
-                  <div className="font-montserrat font-black text-2xl text-gray-900">{s.val}</div>
-                  <div className="text-gray-400 text-sm">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="font-montserrat font-bold text-gray-900 text-xl mb-4">История бронирований</h2>
-            <div className="flex flex-col gap-4 mb-8">
-              {bookings.map(b => (
-                <div key={b.id} className="bg-white rounded-3xl p-5 shadow-sm flex gap-4 items-center card-hover">
-                  <img src={b.image} alt={b.name} className="w-16 h-16 rounded-2xl object-cover" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Badge variant="outline" className="text-xs border-brand-purple text-brand-purple">{b.type}</Badge>
-                      <Badge className={`text-xs border-0 ${b.status === "Подтверждено" ? "bg-green-50 text-green-600" : "bg-yellow-50 text-yellow-600"}`}>
-                        {b.status}
-                      </Badge>
+                  <div className="px-4 py-3 flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1.5">
+                      {hotel.tags.map(t => (
+                        <span key={t} className="text-xs bg-purple-50 text-brand-purple px-2.5 py-1 rounded-full">{t}</span>
+                      ))}
                     </div>
-                    <div className="font-montserrat font-bold text-gray-900 text-sm">{b.name}</div>
-                    <div className="text-gray-400 text-xs">{b.dates}</div>
+                    <div className="flex items-center gap-1 bg-green-50 px-2.5 py-1 rounded-full shrink-0">
+                      <span className="text-green-600 font-bold text-sm">{hotel.rating}</span>
+                      <Icon name="Star" size={11} className="text-green-500 fill-green-500" />
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-montserrat font-black text-gray-900">{b.price.toLocaleString()} ₽</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="font-montserrat font-bold text-gray-900 text-xl mb-4">Настройки</h2>
-            <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
-              {[
-                { icon: "User", label: "Личные данные", hint: "Изменить профиль" },
-                { icon: "Bell", label: "Уведомления", hint: "Скидки и акции" },
-                { icon: "CreditCard", label: "Способы оплаты", hint: "Добавить карту" },
-                { icon: "Shield", label: "Безопасность", hint: "Пароль и 2FA" },
-              ].map((item, i, arr) => (
-                <button key={item.icon} className={`w-full flex items-center gap-4 p-5 hover:bg-gray-50 transition-colors text-left ${i < arr.length - 1 ? "border-b border-gray-100" : ""}`}>
-                  <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
-                    <Icon name={item.icon} fallback="CircleAlert" size={18} className="text-brand-purple" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900">{item.label}</div>
-                    <div className="text-gray-400 text-sm">{item.hint}</div>
-                  </div>
-                  <Icon name="ChevronRight" size={18} className="text-gray-300" />
                 </button>
               ))}
             </div>
+          )}
+
+          {/* Flights */}
+          {searchTab === "flights" && (
+            <div className="px-4 flex flex-col gap-3 pt-2">
+              {tickets.map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => setPage("booking")}
+                  className="bg-white rounded-3xl p-5 shadow-sm active:scale-[0.98] transition-transform text-left w-full"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold text-brand-purple bg-purple-50 px-2.5 py-1 rounded-full">{t.airline}</span>
+                    <span className="text-xs text-gray-400">{t.date}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-center">
+                      <div className="font-montserrat font-black text-2xl text-gray-900">{t.fromCode}</div>
+                      <div className="text-gray-400 text-xs">{t.from}</div>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center gap-1">
+                      <span className="text-xs text-gray-400">{t.duration}</span>
+                      <div className="w-full flex items-center gap-1">
+                        <div className="flex-1 h-px bg-gray-200" />
+                        <Icon name="Plane" size={14} className="text-brand-purple" />
+                        <div className="flex-1 h-px bg-gray-200" />
+                      </div>
+                      <span className="text-xs text-gray-400">{t.cls}</span>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-montserrat font-black text-2xl text-gray-900">{t.toCode}</div>
+                      <div className="text-gray-400 text-xs">{t.to}</div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="font-montserrat font-black text-2xl text-gray-900">{t.price.toLocaleString()} ₽</span>
+                    <span className="gradient-brand text-white text-sm font-semibold px-5 py-2.5 rounded-2xl">Купить</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ════════════ BOOKING ════════════ */}
+      {page === "booking" && (
+        <div className="pb-24">
+          {/* Back + image */}
+          <div className="relative h-64">
+            <img src={selectedHotel?.image || HOTEL_IMAGE} alt="hotel" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+            <button
+              onClick={() => setPage("results")}
+              className="absolute top-14 left-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center"
+            >
+              <Icon name="ArrowLeft" size={18} className="text-white" />
+            </button>
+            <div className="absolute bottom-4 left-4 right-4">
+              <h1 className="font-montserrat font-black text-white text-xl leading-tight">
+                {selectedHotel?.name || "Grand Palace Hotel"}
+              </h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Icon name="MapPin" size={12} className="text-white/70" />
+                <span className="text-white/70 text-sm">{selectedHotel?.city || "Дубай"}</span>
+                {selectedHotel && (
+                  <div className="flex items-center gap-1 bg-green-500/30 px-2 py-0.5 rounded-full ml-auto">
+                    <span className="text-white font-bold text-xs">{selectedHotel.rating}</span>
+                    <Icon name="Star" size={10} className="text-yellow-300 fill-yellow-300" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="px-4 pt-5 flex flex-col gap-4">
+            {/* Dates */}
+            <div className="bg-white rounded-3xl p-5 shadow-sm">
+              <h3 className="font-montserrat font-bold text-gray-900 mb-4">Даты и гости</h3>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="bg-gray-50 rounded-2xl px-4 py-3">
+                  <div className="text-xs text-gray-400 mb-1">Заезд</div>
+                  <div className="flex items-center gap-2">
+                    <Icon name="Calendar" size={15} className="text-brand-purple" />
+                    <span className="text-sm font-semibold text-gray-900">15 мар 2026</span>
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-2xl px-4 py-3">
+                  <div className="text-xs text-gray-400 mb-1">Выезд</div>
+                  <div className="flex items-center gap-2">
+                    <Icon name="Calendar" size={15} className="text-brand-purple" />
+                    <span className="text-sm font-semibold text-gray-900">22 мар 2026</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 rounded-2xl px-4 py-3">
+                <div className="text-xs text-gray-400 mb-1">Гости</div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Users" size={15} className="text-brand-purple" />
+                  <span className="text-sm font-semibold text-gray-900">2 взрослых</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Guest info */}
+            <div className="bg-white rounded-3xl p-5 shadow-sm">
+              <h3 className="font-montserrat font-bold text-gray-900 mb-4">Данные гостя</h3>
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="Имя" className="rounded-2xl bg-gray-50 border-0 h-12" />
+                  <Input placeholder="Фамилия" className="rounded-2xl bg-gray-50 border-0 h-12" />
+                </div>
+                <Input type="email" placeholder="Email" className="rounded-2xl bg-gray-50 border-0 h-12" />
+                <Input type="tel" placeholder="+7 (999) 000-00-00" className="rounded-2xl bg-gray-50 border-0 h-12" />
+              </div>
+            </div>
+
+            {/* Payment */}
+            <div className="bg-white rounded-3xl p-5 shadow-sm">
+              <h3 className="font-montserrat font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Icon name="CreditCard" size={18} className="text-brand-purple" /> Оплата
+              </h3>
+              <div className="flex gap-2 mb-4">
+                {["💳 Карта", "🏦 СБП", "📱 Pay"].map((m, i) => (
+                  <button
+                    key={m}
+                    className={`flex-1 py-2.5 rounded-2xl text-xs font-semibold border-2 transition-all ${
+                      i === 0 ? "border-brand-purple bg-purple-50 text-brand-purple" : "border-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+              <Input placeholder="0000 0000 0000 0000" className="rounded-2xl bg-gray-50 border-0 h-12 font-mono mb-3" />
+              <div className="grid grid-cols-2 gap-3">
+                <Input placeholder="MM/YY" className="rounded-2xl bg-gray-50 border-0 h-12" />
+                <Input placeholder="CVV •••" type="password" className="rounded-2xl bg-gray-50 border-0 h-12" />
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="bg-white rounded-3xl p-5 shadow-sm">
+              {[
+                { l: "Стоимость (7 ночей)", v: selectedHotel ? `${(selectedHotel.price * 7).toLocaleString()} ₽` : "129 500 ₽" },
+                { l: "Сервисный сбор", v: "2 590 ₽" },
+                { l: "Налоги", v: "1 300 ₽" },
+              ].map(r => (
+                <div key={r.l} className="flex justify-between py-2.5 border-b border-gray-50 text-sm">
+                  <span className="text-gray-500">{r.l}</span>
+                  <span className="font-semibold text-gray-900">{r.v}</span>
+                </div>
+              ))}
+              <div className="flex justify-between pt-3 mt-1">
+                <span className="font-montserrat font-bold text-gray-900">Итого</span>
+                <span className="font-montserrat font-black text-xl text-brand-purple">
+                  {selectedHotel ? `${(selectedHotel.price * 7 + 3890).toLocaleString()} ₽` : "133 390 ₽"}
+                </span>
+              </div>
+            </div>
+
+            <button className="w-full gradient-brand text-white py-4 rounded-2xl font-montserrat font-bold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg shadow-purple-200">
+              <Icon name="Lock" size={18} /> Оплатить безопасно
+            </button>
+            <p className="text-center text-gray-400 text-xs -mt-1">🔒 SSL · Возврат в течение 24 часов</p>
           </div>
         </div>
       )}
 
-      {/* SAVED */}
+      {/* ════════════ SAVED ════════════ */}
       {page === "saved" && (
-        <div className="pt-16">
-          <div className="gradient-hero px-4 py-12">
-            <div className="max-w-3xl mx-auto">
-              <h1 className="font-montserrat text-3xl font-bold text-white">Избранное</h1>
-              <p className="text-white/60 mt-1">{savedHotels.length} сохранённых объектов</p>
-            </div>
+        <div className="pb-24">
+          <div className="gradient-hero px-4 pt-14 pb-6">
+            <h1 className="font-montserrat text-2xl font-black text-white">Избранное</h1>
+            <p className="text-white/60 text-sm mt-0.5">{savedHotels.length} сохранённых</p>
           </div>
 
-          <div className="max-w-3xl mx-auto px-4 py-8">
+          <div className="px-4 pt-4">
             {savedHotels.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center pt-20">
                 <div className="text-6xl mb-4">🤍</div>
-                <div className="font-montserrat font-bold text-gray-900 text-xl">Пока ничего нет</div>
-                <div className="text-gray-400 mt-2 mb-6">Сохраняйте понравившиеся отели, нажимая ♥</div>
-                <Button onClick={() => setPage("results")} className="gradient-brand text-white border-0">
+                <div className="font-montserrat font-bold text-gray-900 text-xl mb-2">Пока пусто</div>
+                <p className="text-gray-400 text-sm mb-6">Сохраняйте отели, нажимая ♥</p>
+                <button onClick={() => setPage("results")} className="gradient-brand text-white px-6 py-3 rounded-2xl font-semibold">
                   Найти отели
-                </Button>
+                </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-3">
                 {savedHotels.map(hotel => (
-                  <div key={hotel.id} className="bg-white rounded-3xl overflow-hidden shadow-sm card-hover cursor-pointer"
-                    onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}>
-                    <div className="relative">
-                      <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover" />
-                      <button
-                        className="absolute top-3 right-3 bg-white/90 rounded-full p-2"
-                        onClick={(e) => { e.stopPropagation(); toggleSave(hotel.id); }}
-                      >
-                        <Icon name="Heart" size={16} className="text-red-500 fill-red-500" />
-                      </button>
+                  <button
+                    key={hotel.id}
+                    onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
+                    className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform text-left w-full flex gap-0"
+                  >
+                    <div className="relative w-28 shrink-0 h-28">
+                      <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-montserrat font-bold text-gray-900">{hotel.name}</h3>
-                      <div className="flex items-center gap-1 text-gray-500 text-sm mt-1 mb-3">
-                        <Icon name="MapPin" size={13} />{hotel.city}
-                      </div>
-                      <div className="flex items-center justify-between">
+                    <div className="flex-1 p-4">
+                      <div className="flex items-start justify-between">
                         <div>
-                          <span className="font-montserrat font-black text-gray-900 text-lg">{hotel.price.toLocaleString()} ₽</span>
-                          <span className="text-gray-400 text-xs">/ночь</span>
+                          <div className="font-montserrat font-bold text-gray-900 text-sm line-clamp-1">{hotel.name}</div>
+                          <div className="flex items-center gap-1 text-gray-400 text-xs mt-0.5">
+                            <Icon name="MapPin" size={10} />{hotel.city}
+                          </div>
                         </div>
-                        <button className="gradient-brand text-white text-sm px-4 py-2 rounded-xl font-semibold">
-                          Забронировать
+                        <button onClick={e => { e.stopPropagation(); toggleSave(hotel.id); }} className="ml-1">
+                          <Icon name="Heart" size={18} className="text-red-500 fill-red-500" />
                         </button>
                       </div>
+                      <div className="mt-3 flex items-center justify-between">
+                        <div>
+                          <span className="font-montserrat font-black text-gray-900">{hotel.price.toLocaleString()} ₽</span>
+                          <span className="text-gray-400 text-xs">/ночь</span>
+                        </div>
+                        <span className="gradient-brand text-white text-xs font-semibold px-3 py-1.5 rounded-xl">Бронировать</span>
+                      </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
@@ -812,54 +609,49 @@ export default function Index() {
         </div>
       )}
 
-      {/* REVIEWS */}
+      {/* ════════════ REVIEWS ════════════ */}
       {page === "reviews" && (
-        <div className="pt-16">
-          <div className="gradient-hero px-4 py-12">
-            <div className="max-w-3xl mx-auto">
-              <h1 className="font-montserrat text-3xl font-bold text-white">Отзывы</h1>
-              <p className="text-white/60 mt-1">Реальные отзывы от путешественников</p>
-            </div>
+        <div className="pb-24">
+          <div className="gradient-hero px-4 pt-14 pb-6">
+            <h1 className="font-montserrat text-2xl font-black text-white">Отзывы</h1>
+            <p className="text-white/60 text-sm mt-0.5">От реальных путешественников</p>
           </div>
 
-          <div className="max-w-3xl mx-auto px-4 py-8">
-            <div className="bg-white rounded-3xl p-6 shadow-sm mb-8">
-              <div className="text-center">
-                <div className="font-montserrat font-black text-6xl text-brand-purple mb-2">4.8</div>
-                <div className="flex justify-center gap-1 mb-2">
-                  {"★★★★★".split("").map((s, i) => (
-                    <span key={i} className="text-yellow-400 text-2xl">★</span>
+          <div className="px-4 pt-4">
+            {/* Rating summary */}
+            <div className="bg-white rounded-3xl p-5 shadow-sm mb-4">
+              <div className="flex items-center gap-5">
+                <div className="text-center">
+                  <div className="font-montserrat font-black text-5xl text-brand-purple">4.8</div>
+                  <div className="flex gap-0.5 justify-center mt-1">
+                    {"★★★★★".split("").map((_, i) => (
+                      <span key={i} className="text-yellow-400 text-base">★</span>
+                    ))}
+                  </div>
+                  <div className="text-gray-400 text-xs mt-1">7 547 отзывов</div>
+                </div>
+                <div className="flex-1 space-y-2">
+                  {[{ l: "5★", p: 78 }, { l: "4★", p: 15 }, { l: "3★", p: 5 }, { l: "≤2★", p: 2 }].map(r => (
+                    <div key={r.l} className="flex items-center gap-2">
+                      <span className="text-xs text-gray-400 w-8">{r.l}</span>
+                      <div className="flex-1 bg-gray-100 rounded-full h-1.5">
+                        <div className="gradient-brand h-1.5 rounded-full transition-all" style={{ width: `${r.p}%` }} />
+                      </div>
+                      <span className="text-xs font-semibold text-gray-600 w-7 text-right">{r.p}%</span>
+                    </div>
                   ))}
                 </div>
-                <div className="text-gray-400">На основе 7 547 отзывов</div>
-              </div>
-              <div className="mt-6 space-y-3">
-                {[
-                  { label: "5 звёзд", pct: 78 },
-                  { label: "4 звезды", pct: 15 },
-                  { label: "3 звезды", pct: 5 },
-                  { label: "2 звезды", pct: 1 },
-                  { label: "1 звезда", pct: 1 },
-                ].map(r => (
-                  <div key={r.label} className="flex items-center gap-3">
-                    <span className="text-sm text-gray-500 w-20 shrink-0">{r.label}</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-2">
-                      <div className="gradient-brand h-2 rounded-full" style={{ width: `${r.pct}%` }} />
-                    </div>
-                    <span className="text-sm font-semibold text-gray-700 w-8 shrink-0">{r.pct}%</span>
-                  </div>
-                ))}
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {reviewsList.map(r => (
-                <div key={r.id} className="bg-white rounded-3xl p-6 shadow-sm card-hover">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl">{r.avatar}</div>
+                <div key={r.id} className="bg-white rounded-3xl p-5 shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-11 h-11 bg-purple-50 rounded-2xl flex items-center justify-center text-xl">{r.avatar}</div>
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900">{r.author}</div>
-                      <div className="text-gray-400 text-sm">{r.hotel}</div>
+                      <div className="font-semibold text-gray-900 text-sm">{r.author}</div>
+                      <div className="text-gray-400 text-xs">{r.hotel}</div>
                     </div>
                     <div className="text-right">
                       <div className="flex gap-0.5 justify-end">
@@ -867,16 +659,106 @@ export default function Index() {
                           <span key={i} className="text-yellow-400 text-sm">★</span>
                         ))}
                       </div>
-                      <div className="text-gray-400 text-xs mt-0.5">{r.date}</div>
+                      <div className="text-gray-400 text-xs">{r.date}</div>
                     </div>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">{r.text}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{r.text}</p>
                 </div>
               ))}
             </div>
 
-            <button className="w-full mt-6 py-4 border-2 border-dashed border-gray-200 rounded-2xl text-brand-purple font-semibold hover:border-brand-purple transition-colors flex items-center justify-center gap-2">
-              <Icon name="Plus" size={18} /> Написать отзыв
+            <button className="w-full mt-4 py-4 border-2 border-dashed border-gray-200 rounded-2xl text-brand-purple font-semibold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+              <Icon name="Plus" size={16} /> Написать отзыв
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ════════════ PROFILE ════════════ */}
+      {page === "profile" && (
+        <div className="pb-24">
+          {/* Header */}
+          <div className="gradient-hero px-4 pt-14 pb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 gradient-brand rounded-3xl flex items-center justify-center text-2xl shadow-lg shadow-purple-300">
+                👤
+              </div>
+              <div>
+                <h1 className="font-montserrat text-xl font-black text-white">Александр Петров</h1>
+                <div className="text-white/60 text-sm">alex.petrov@email.com</div>
+                <Badge className="mt-1 bg-brand-orange/90 text-white border-0 text-xs">✈️ Premium</Badge>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-4 pt-4 flex flex-col gap-4">
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { v: "12", l: "Поездок", i: "Globe" },
+                { v: "8", l: "Стран", i: "Map" },
+                { v: "48K", l: "Миль", i: "Plane" },
+              ].map(s => (
+                <div key={s.l} className="bg-white rounded-2xl p-3.5 text-center shadow-sm">
+                  <Icon name={s.i} fallback="CircleAlert" size={20} className="text-brand-purple mx-auto mb-1" />
+                  <div className="font-montserrat font-black text-xl text-gray-900">{s.v}</div>
+                  <div className="text-gray-400 text-xs">{s.l}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* History */}
+            <div>
+              <h2 className="font-montserrat font-bold text-gray-900 mb-3">История бронирований</h2>
+              <div className="flex flex-col gap-2.5">
+                {bookings.map(b => (
+                  <div key={b.id} className="bg-white rounded-3xl p-4 shadow-sm flex gap-3 items-center">
+                    <img src={b.image} alt={b.name} className="w-14 h-14 rounded-2xl object-cover shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                        <span className="text-xs font-semibold bg-purple-50 text-brand-purple px-2 py-0.5 rounded-full">{b.type}</span>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${b.status === "Подтверждено" ? "bg-green-50 text-green-600" : "bg-yellow-50 text-yellow-600"}`}>
+                          {b.status}
+                        </span>
+                      </div>
+                      <div className="font-montserrat font-bold text-gray-900 text-sm truncate">{b.name}</div>
+                      <div className="text-gray-400 text-xs">{b.dates}</div>
+                    </div>
+                    <div className="font-montserrat font-black text-gray-900 text-sm shrink-0">{b.price.toLocaleString()} ₽</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Settings */}
+            <div>
+              <h2 className="font-montserrat font-bold text-gray-900 mb-3">Настройки</h2>
+              <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+                {[
+                  { i: "User", l: "Личные данные", h: "Изменить профиль" },
+                  { i: "Bell", l: "Уведомления", h: "Скидки и акции" },
+                  { i: "CreditCard", l: "Способы оплаты", h: "Добавить карту" },
+                  { i: "Shield", l: "Безопасность", h: "Пароль и 2FA" },
+                ].map((item, idx, arr) => (
+                  <button
+                    key={item.i}
+                    className={`w-full flex items-center gap-4 p-4 active:bg-gray-50 text-left ${idx < arr.length - 1 ? "border-b border-gray-50" : ""}`}
+                  >
+                    <div className="w-9 h-9 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
+                      <Icon name={item.i} fallback="CircleAlert" size={16} className="text-brand-purple" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-gray-900 text-sm">{item.l}</div>
+                      <div className="text-gray-400 text-xs">{item.h}</div>
+                    </div>
+                    <Icon name="ChevronRight" size={16} className="text-gray-300" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button className="w-full py-3.5 rounded-2xl border-2 border-red-100 text-red-400 font-semibold text-sm flex items-center justify-center gap-2">
+              <Icon name="LogOut" size={16} /> Выйти из аккаунта
             </button>
           </div>
         </div>
