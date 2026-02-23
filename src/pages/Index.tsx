@@ -194,10 +194,10 @@ export default function Index() {
             </div>
             <div className="flex flex-col gap-3">
               {hotels.slice(0, 3).map(hotel => (
-                <button
+                <div
                   key={hotel.id}
                   onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
-                  className="bg-white rounded-3xl overflow-hidden flex gap-0 shadow-sm active:scale-[0.98] transition-transform text-left"
+                  className="bg-white rounded-3xl overflow-hidden flex gap-0 shadow-sm active:scale-[0.98] transition-transform text-left cursor-pointer"
                 >
                   <div className="relative w-28 shrink-0">
                     <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
@@ -238,7 +238,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </div>
@@ -335,10 +335,10 @@ export default function Index() {
           {searchTab === "hotels" && (
             <div className="px-4 flex flex-col gap-3 pt-2">
               {filteredHotels.map(hotel => (
-                <button
+                <div
                   key={hotel.id}
                   onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
-                  className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform text-left w-full"
+                  className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform cursor-pointer"
                 >
                   <div className="relative">
                     <img src={hotel.image} alt={hotel.name} className="w-full h-52 object-cover" />
@@ -380,7 +380,7 @@ export default function Index() {
                       <Icon name="Star" size={11} className="text-green-500 fill-green-500" />
                     </div>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           )}
@@ -573,10 +573,10 @@ export default function Index() {
             ) : (
               <div className="flex flex-col gap-3">
                 {savedHotels.map(hotel => (
-                  <button
+                  <div
                     key={hotel.id}
                     onClick={() => { setSelectedHotel(hotel); setPage("booking"); }}
-                    className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform text-left w-full flex gap-0"
+                    className="bg-white rounded-3xl overflow-hidden shadow-sm active:scale-[0.98] transition-transform flex gap-0 cursor-pointer"
                   >
                     <div className="relative w-28 shrink-0 h-28">
                       <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
@@ -601,7 +601,7 @@ export default function Index() {
                         <span className="gradient-brand text-white text-xs font-semibold px-3 py-1.5 rounded-xl">Бронировать</span>
                       </div>
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             )}
